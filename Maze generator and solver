@@ -1,0 +1,44 @@
+def print_maze(maze):
+    for row in maze:
+        print(' '.join(row))
+
+def solve_maze(maze, x, y, end_x, end_y):
+    if x == end_x and y == end_y:
+        maze[x][y] = 'P'
+        return True
+
+    if maze[x][y] != '0':
+        return False
+
+    maze[x][y] = 'P'
+
+    # Try moving: right, down, left, up
+    if (solve_maze(maze, x, y + 1, end_x, end_y) or
+        solve_maze(maze, x + 1, y, end_x, end_y) or
+        solve_maze(maze, x, y - 1, end_x, end_y) or
+        solve_maze(maze, x - 1, y, end_x, end_y)):
+        return True
+
+    maze[x][y] = '0'  # backtrack
+    return False
+
+# Small 5x5 Maze (1 = wall, 0 = path)
+maze = [
+    ['1', '1', '1', '1', '1'],
+    ['1', '0', '1', '0', '1'],
+    ['1', '0', '0', '0', '1'],
+    ['1', '1', '1', '0', '1'],
+    ['1', '1', '1', '0', '1'],
+]
+
+start_x, start_y = 1, 1
+end_x, end_y = 4, 3
+
+print("Original Maze:")
+print_maze(maze)
+
+if solve_maze(maze, start_x, start_y, end_x, end_y):
+    print("\nSolved Maze (Path marked with 'P'):")
+    print_maze(maze)
+else:
+    print("\nNo path found.")
